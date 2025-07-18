@@ -449,8 +449,7 @@ HRESULT WINAPI New_CSLQuery_Initialize()
 		WriteToLog(Log);
 		delete[] Log;
 	}
-	if (bMultimonAllowed)
-	{
+	if (bMultimonAllowed){
 		*bMultimonAllowed = INIReadDWordHex(IniFile, "SLInit", "bMultimonAllowed", 1);
 
 		Log = new char[1024];
@@ -550,7 +549,7 @@ void Hook()
 		wchar_t wcLogFile[256];
 		memset(wcLogFile, 0x00, 256);
 		mbstowcs(wcLogFile, LogFileVar.Value, 255);
-		wcscpy(LogFile, wcLogFile);
+		wcscpy_s(LogFile, 256, wcLogFile);
 	}
 
 	SIZE_T bw;
@@ -649,9 +648,7 @@ void Hook()
 		_SLGetWindowsInformationDWORD = (SLGETWINDOWSINFORMATIONDWORD)GetProcAddress(hSLC, "SLGetWindowsInformationDWORD");
 		if (_SLGetWindowsInformationDWORD != INVALID_HANDLE_VALUE)
 		{
-			// rewrite original function to call our function (make hook)
-
-			WriteToLog("Hook SLGetWindowsInformationDWORD\r\n");
+			// rewrite original function to call our function (make hook)			WriteToLog("Hook SLGetWindowsInformationDWORD\r\n");
 			#ifdef _WIN64
 			Stub_SLGetWindowsInformationDWORD.MovOp = 0x48;
 			Stub_SLGetWindowsInformationDWORD.MovRegArg = 0xB8;
